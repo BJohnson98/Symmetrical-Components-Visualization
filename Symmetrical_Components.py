@@ -13,8 +13,8 @@ import math
 a= -0.5+0.866j
 #Symmetrical Components Inverse Matrix
 A = np.array([[1, 1   , 1   ],
-			  [1, a   , a**2],
-			  [1, a**2, a   ]])/3 
+	      [1, a   , a**2],
+	      [1, a**2, a   ]])/3 
 
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
