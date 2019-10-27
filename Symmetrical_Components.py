@@ -9,8 +9,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 import math
 
+#alpha operator 1<120
+a= -0.5+0.866j
+#Symmetrical Components Inverse Matrix
+A = np.array([[1, 1   , 1   ],
+			  [1, a   , a**2],
+			  [1, a**2, a   ]])/3 
+
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
+	print(A)
+	#Inputing the 3 phasors to seperate into its sequence components
 	A_radius = int(input("Enter Phase A's radius: "))
 	A_angle = int(input("Enter Phase A's angle: "))
 	B_radius = int(input("Enter Phase B's radius: "))
@@ -18,20 +27,30 @@ def main():
 	C_radius = int(input("Enter Phase C's radius: "))
 	C_angle = int(input("Enter Phase C's angle: "))	
 	
+	
+	
 	plot_vector(A_radius,A_angle,'r')
 	plot_vector(B_radius,B_angle,'y')
 	plot_vector(C_radius,C_angle,'b')
 	plot(maximum(A_radius,B_radius,C_radius))
 
 
-
+'''
+Adds a vector to the plot. Inputs are polar coords and color of line. 
+Author: Brandon Johnson.
+Date created: 10/27/2019
+'''
 def plot_vector(radius, angle, c):
 	x,y = pol2cart(radius,angle)
 	plt.quiver(0, 0, x, y, angles='xy', scale_units='xy', scale=1, color=c)
 
+'''
+Finally plots the graph and post processing.
+max input helps scale the graph. 
+Author: Brandon Johnson.
+Date created: 10/27/2019
+'''
 def plot(max):
-	#plt.quiver([0, 0, 0], [0, 0, 0], [1, -2, 4], [1, 2, -7], angles='xy', scale_units='xy', scale=1, color=['r','y','b'])
-	#plt.quiver(0, 0, 1, 0, angles='xy', scale_units='xy', scale=1, color='g')
 	plt.xlim(-max*1.1, max*1.1)
 	plt.ylim(-max*1.1, max*1.1)
 	plt.grid()
@@ -57,8 +76,9 @@ Date created: 10/27/2019
 '''
 def pol2cart(rho, phi):
 	phi = phi*math.pi/180
-	x = rho * np.cos(phi)
-	y = rho * np.sin(phi)
+	x = rho*np.cos(phi)
+	y = rho*np.sin(phi)
+	#if statements fixes floating point multiplication
 	if y<0.001 and y>-0.001:
 		y=0
 	if x<0.00001 and x>-0.001:
@@ -77,3 +97,5 @@ def maximum(a, b, c):
 if __name__ == "__main__":
 	main()
 
+#quiver plot template
+#plt.quiver([0, 0, 0], [0, 0, 0], [1, -2, 4], [1, 2, -7], angles='xy', scale_units='xy', scale=1, color=['r','y','b'])
