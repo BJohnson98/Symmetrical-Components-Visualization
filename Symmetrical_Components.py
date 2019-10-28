@@ -5,6 +5,12 @@ the system is made out of.
 Author: Brandon Johnson
 Date: 10/27/2019
 '''
+class phasor:
+	def __init__(self, radius, angle):
+		self.radius = radius
+		self.angle = angle
+	
+
 import numpy as np
 import matplotlib.pyplot as plt
 import math
@@ -13,26 +19,34 @@ import math
 a= -0.5+0.866j
 #Symmetrical Components Inverse Matrix
 A = np.array([[1, 1   , 1   ],
-	      [1, a   , a**2],
-	      [1, a**2, a   ]])/3 
+			  [1, a   , a**2],
+			  [1, a**2, a   ]])/3 
 
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
-	print(A)
-	#Inputing the 3 phasors to seperate into its sequence components
+
+	#Inputing the 3 phasors to seperate into its sequence components	
 	A_radius = int(input("Enter Phase A's radius: "))
 	A_angle = int(input("Enter Phase A's angle: "))
+	phasor_A = phasor(A_radius, A_angle)
 	B_radius = int(input("Enter Phase B's radius: "))
 	B_angle = int(input("Enter Phase B's angle: "))
+	phasor_B = phasor(B_radius, B_angle)
 	C_radius = int(input("Enter Phase C's radius: "))
 	C_angle = int(input("Enter Phase C's angle: "))	
+	phasor_C = phasor(C_radius, C_angle)
 	
+	'''
+	next steps are to find:
+	va0
+	va+
+	va-
+	'''
 	
-	
-	plot_vector(A_radius,A_angle,'r')
-	plot_vector(B_radius,B_angle,'y')
-	plot_vector(C_radius,C_angle,'b')
-	plot(maximum(A_radius,B_radius,C_radius))
+	plot_vector(phasor_A.radius, A_angle, 'r')
+	plot_vector(phasor_B.radius, B_angle, 'y')
+	plot_vector(phasor_C.radius, C_angle, 'b')
+	plot(maximum(phasor_A.radius, phasor_B.radius, phasor_C.radius))
 
 
 '''
