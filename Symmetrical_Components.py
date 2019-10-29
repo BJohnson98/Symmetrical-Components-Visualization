@@ -11,7 +11,7 @@ import math
 import cmath
 
 class phasor:
-	def __init__(self, radius, angle):
+	def __init__(self, radius=0, angle=0):
 		self.radius = radius
 		self.angle = angle
 	def cart(self):
@@ -19,6 +19,16 @@ class phasor:
 		y = self.radius*np.sin(self.angle*math.pi/180)
 		z = round(x,2) + round(y,2)*cmath.sqrt(-1)
 		return(z)
+	def get_real(self):
+		return(round(self.radius*np.cos(self.angle*math.pi/180),2))
+		
+	def get_imaginary(self): 
+		return(round(self.radius*np.sin(self.angle*math.pi/180),2))
+	#allows you to input a new phasor in cartesian form.
+	def input_cart(self, real, imag):
+		self.radius = round(np.sqrt(real**2 + imag**2),3)
+		self.angle = round(np.arctan2(imag, real)*180/math.pi,2)
+
 
 #alpha operator 1<120
 a= -0.5+0.866j
@@ -29,7 +39,11 @@ A = np.array([[1, 1   , 1   ],
 
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
-
+	#defining the sequence components phasors
+	Va0 = phasor()
+	Va_pos = phasor()
+	Va_neg = phasor()
+	
 	#Inputing the 3 phasors to seperate into its sequence components	
 	A_radius = int(input("Enter Phase A's radius: "))
 	A_angle = int(input("Enter Phase A's angle: "))
@@ -46,12 +60,20 @@ def main():
 	#dot product of 3 components with A matrix
 	sequence_components = np.dot(np.linalg.inv(A), unbalanced)
 
-	Va0 = sequence_components[0]
-	Va_pos = sequence_components[1]
-	Va_neg = sequence_components[2]
+	#inputing the sequence components into the sequence phasors.
+	Va0.input_cart(sequence_components[0].real, sequence_components[0].imag)
+	Va_pos.input_cart(sequence_components[1].real, sequence_components[1].imag)
+	Va_neg.input_cart(sequence_components[2].real, sequence_components[2].imag)
+
+	print(cart2pol(Va0.get_real(),Va0.get_imaginary()))
+	print(cart2pol(Va_pos.get_real(),Va_pos.get_imaginary()))
+	print(cart2pol(Va_neg.get_real(),Va_neg.get_imaginary()))
 	
-
-
+	#the sequence components for the a phase works!
+	plot_vector(0, 0, Va0.radius, Va0.angle, 'green')
+	plot_vector(Va0.get_real(),Va0.get_imaginary(), Va_pos.radius, Va_pos.angle, 'orange')
+	plot_vector(Va_pos.get_real()+Va0.get_real(),Va_pos.get_imaginary()+Va0.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
+	
 	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
 	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
 	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
