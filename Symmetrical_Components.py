@@ -28,7 +28,9 @@ class phasor:
 	def input_cart(self, real, imag):
 		self.radius = round(np.sqrt(real**2 + imag**2),3)
 		self.angle = round(np.arctan2(imag, real)*180/math.pi,2)
-
+	
+	def rotate(self, alpha):
+		self.angle = self.angle + alpha
 
 #alpha operator 1<120
 a= -0.5+0.866j
@@ -70,9 +72,16 @@ def main():
 	print(cart2pol(Va_neg.get_real(),Va_neg.get_imaginary()))
 	
 	#the sequence components for the a phase works!
+	#order is positive sequence, negative sequence, zero sequence.
+	plot_vector(0,0, Va_pos.radius, Va_pos.angle, 'orange')
+	plot_vector(Va_pos.get_real(),Va_pos.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
+	plot_vector(Va_pos.get_real()+Va_neg.get_real(), Va_pos.get_imaginary()+Va_neg.get_imaginary(), Va0.radius, Va0.angle, 'green')
+	
+	''' #order is zero, positive, then negative sequence.
 	plot_vector(0, 0, Va0.radius, Va0.angle, 'green')
 	plot_vector(Va0.get_real(),Va0.get_imaginary(), Va_pos.radius, Va_pos.angle, 'orange')
 	plot_vector(Va_pos.get_real()+Va0.get_real(),Va_pos.get_imaginary()+Va0.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
+	'''
 	
 	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
 	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
