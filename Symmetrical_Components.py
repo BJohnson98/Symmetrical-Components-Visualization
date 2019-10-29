@@ -5,22 +5,27 @@ the system is made out of.
 Author: Brandon Johnson
 Date: 10/27/2019
 '''
+import numpy as np
+import matplotlib.pyplot as plt
+import math
+import cmath
+
 class phasor:
 	def __init__(self, radius, angle):
 		self.radius = radius
 		self.angle = angle
-	
-
-import numpy as np
-import matplotlib.pyplot as plt
-import math
+	def cart(self):
+		x = self.radius*np.cos(self.angle*math.pi/180)
+		y = self.radius*np.sin(self.angle*math.pi/180)
+		z = round(x,2) + round(y,2)*cmath.sqrt(-1)
+		return(z)
 
 #alpha operator 1<120
 a= -0.5+0.866j
-#Symmetrical Components Inverse Matrix
+#Symmetrical Components Matrix
 A = np.array([[1, 1   , 1   ],
-			  [1, a   , a**2],
-			  [1, a**2, a   ]])/3 
+			  [1, a**2, a   ],
+			  [1, a   , a**2]]) 
 
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
@@ -28,35 +33,38 @@ def main():
 	#Inputing the 3 phasors to seperate into its sequence components	
 	A_radius = int(input("Enter Phase A's radius: "))
 	A_angle = int(input("Enter Phase A's angle: "))
-	phasor_A = phasor(A_radius, A_angle)
+	phase_A = phasor(A_radius, A_angle)
 	B_radius = int(input("Enter Phase B's radius: "))
 	B_angle = int(input("Enter Phase B's angle: "))
-	phasor_B = phasor(B_radius, B_angle)
+	phase_B = phasor(B_radius, B_angle)
 	C_radius = int(input("Enter Phase C's radius: "))
 	C_angle = int(input("Enter Phase C's angle: "))	
-	phasor_C = phasor(C_radius, C_angle)
-	
-	'''
-	next steps are to find:
-	va0
-	va+
-	va-
-	'''
-	
-	plot_vector(phasor_A.radius, A_angle, 'r')
-	plot_vector(phasor_B.radius, B_angle, 'y')
-	plot_vector(phasor_C.radius, C_angle, 'b')
-	plot(maximum(phasor_A.radius, phasor_B.radius, phasor_C.radius))
+	phase_C = phasor(C_radius, C_angle)
 
+	#creating a 3x1 array of the 3 unbalanced phases
+	unbalanced = np.array([phase_A.cart(), phase_B.cart(), phase_C.cart()])
+	#dot product of 3 components with A matrix
+	sequence_components = np.dot(np.linalg.inv(A), unbalanced)
+
+	Va0 = sequence_components[0]
+	Va_pos = sequence_components[1]
+	Va_neg = sequence_components[2]
+	
+
+
+	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
+	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
+	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
+	plot(maximum(phase_A.radius, phase_B.radius, phase_C.radius))
 
 '''
 Adds a vector to the plot. Inputs are polar coords and color of line. 
 Author: Brandon Johnson.
 Date created: 10/27/2019
 '''
-def plot_vector(radius, angle, c):
+def plot_vector(start_x, start_y, radius, angle, c):
 	x,y = pol2cart(radius,angle)
-	plt.quiver(0, 0, x, y, angles='xy', scale_units='xy', scale=1, color=c)
+	plt.quiver(start_x, start_y, x, y, angles='xy', scale_units='xy', scale=1, color=c)
 
 '''
 Finally plots the graph and post processing.
@@ -92,11 +100,6 @@ def pol2cart(rho, phi):
 	phi = phi*math.pi/180
 	x = rho*np.cos(phi)
 	y = rho*np.sin(phi)
-	#if statements fixes floating point multiplication
-	if y<0.001 and y>-0.001:
-		y=0
-	if x<0.00001 and x>-0.001:
-		x=0
 	return(round(x,2),round(y,2))
 
 '''
@@ -110,6 +113,3 @@ def maximum(a, b, c):
 	
 if __name__ == "__main__":
 	main()
-
-#quiver plot template
-#plt.quiver([0, 0, 0], [0, 0, 0], [1, -2, 4], [1, 2, -7], angles='xy', scale_units='xy', scale=1, color=['r','y','b'])
