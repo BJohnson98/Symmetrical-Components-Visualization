@@ -36,8 +36,8 @@ class phasor:
 a= -0.5+0.866j
 #Symmetrical Components Matrix
 A = np.array([[1, 1   , 1   ],
-			  [1, a**2, a   ],
-			  [1, a   , a**2]]) 
+	      [1, a**2, a   ],
+	      [1, a   , a**2]]) 
 
 #quiver plots (start_x,start_y,end_x,end_y)
 def main():
@@ -56,10 +56,15 @@ def main():
 	C_radius = int(input("Enter Phase C's radius: "))
 	C_angle = int(input("Enter Phase C's angle: "))	
 	phase_C = phasor(C_radius, C_angle)
+	
+	#plot the unbalanced 3 phases
+	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
+	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
+	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
 
 	#creating a 3x1 array of the 3 unbalanced phases
 	unbalanced = np.array([phase_A.cart(), phase_B.cart(), phase_C.cart()])
-	#dot product of 3 components with A matrix
+	#dot product of 3 components with inverse A matrix to solve for the positive, negative, and zero sequence components
 	sequence_components = np.dot(np.linalg.inv(A), unbalanced)
 
 	#inputing the sequence components into the sequence phasors.
@@ -67,25 +72,31 @@ def main():
 	Va_pos.input_cart(sequence_components[1].real, sequence_components[1].imag)
 	Va_neg.input_cart(sequence_components[2].real, sequence_components[2].imag)
 
-	print(cart2pol(Va0.get_real(),Va0.get_imaginary()))
-	print(cart2pol(Va_pos.get_real(),Va_pos.get_imaginary()))
-	print(cart2pol(Va_neg.get_real(),Va_neg.get_imaginary()))
-	
-	#the sequence components for the a phase works!
-	#order is positive sequence, negative sequence, zero sequence.
+	#plot the sequence components for phase_A,
+	#the order is the positive, negative, then zero sequence components
 	plot_vector(0,0, Va_pos.radius, Va_pos.angle, 'orange')
 	plot_vector(Va_pos.get_real(),Va_pos.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
 	plot_vector(Va_pos.get_real()+Va_neg.get_real(), Va_pos.get_imaginary()+Va_neg.get_imaginary(), Va0.radius, Va0.angle, 'green')
 	
-	''' #order is zero, positive, then negative sequence.
-	plot_vector(0, 0, Va0.radius, Va0.angle, 'green')
-	plot_vector(Va0.get_real(),Va0.get_imaginary(), Va_pos.radius, Va_pos.angle, 'orange')
-	plot_vector(Va_pos.get_real()+Va0.get_real(),Va_pos.get_imaginary()+Va0.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
-	'''
+	#rotate the positive and negative sequence components to get phase_B
+	Va_pos.rotate(-120)
+	Va_neg.rotate(120)
 	
-	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
-	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
-	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
+	#plot the sequence components for phase_B
+	plot_vector(0,0, Va_pos.radius, Va_pos.angle, 'orange')
+	plot_vector(Va_pos.get_real(),Va_pos.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
+	plot_vector(Va_pos.get_real()+Va_neg.get_real(), Va_pos.get_imaginary()+Va_neg.get_imaginary(), Va0.radius, Va0.angle, 'green')	
+	
+	#rotate the positive and negative sequence components to get phase_C
+	Va_pos.rotate(-120)
+	Va_neg.rotate(120)
+	
+	#plot the sequence components for phase_C
+	plot_vector(0,0, Va_pos.radius, Va_pos.angle, 'orange')
+	plot_vector(Va_pos.get_real(),Va_pos.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
+	plot_vector(Va_pos.get_real()+Va_neg.get_real(), Va_pos.get_imaginary()+Va_neg.get_imaginary(), Va0.radius, Va0.angle, 'green')
+	
+	#plot the graph and scale to match the phasors.
 	plot(maximum(phase_A.radius, phase_B.radius, phase_C.radius))
 
 '''
