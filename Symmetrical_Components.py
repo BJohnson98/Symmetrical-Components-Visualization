@@ -39,7 +39,6 @@ A = np.array([[1, 1   , 1   ],
 	      [1, a**2, a   ],
 	      [1, a   , a**2]]) 
 
-#quiver plots (start_x,start_y,end_x,end_y)
 def main():
 	#defining the sequence components phasors
 	Va0 = phasor()
