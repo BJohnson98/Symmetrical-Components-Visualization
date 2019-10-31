@@ -56,11 +56,6 @@ def main():
 	C_angle = int(input("Enter Phase C's angle: "))	
 	phase_C = phasor(C_radius, C_angle)
 	
-	#plot the unbalanced 3 phases
-	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
-	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
-	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
-
 	#creating a 3x1 array of the 3 unbalanced phases
 	unbalanced = np.array([phase_A.cart(), phase_B.cart(), phase_C.cart()])
 	#dot product of 3 components with inverse A matrix to solve for the positive, negative, and zero sequence components
@@ -94,6 +89,11 @@ def main():
 	plot_vector(0,0, Va_pos.radius, Va_pos.angle, 'orange')
 	plot_vector(Va_pos.get_real(),Va_pos.get_imaginary(), Va_neg.radius, Va_neg.angle, 'black')	
 	plot_vector(Va_pos.get_real()+Va_neg.get_real(), Va_pos.get_imaginary()+Va_neg.get_imaginary(), Va0.radius, Va0.angle, 'green')
+	
+	#plot the original unbalanced 3 phases
+	plot_vector(0, 0,phase_A.radius, phase_A.angle, 'r')
+	plot_vector(0, 0,phase_B.radius, phase_B.angle, 'y')
+	plot_vector(0, 0,phase_C.radius, phase_C.angle, 'b')
 	
 	#plot the graph and scale to match the phasors.
 	plot(maximum(phase_A.radius, phase_B.radius, phase_C.radius))
