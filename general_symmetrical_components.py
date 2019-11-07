@@ -36,23 +36,36 @@ class phasor:
 def main():
 	color = ['red','y','blue','orange','green','magenta','cyan','brown','purple']
 	alphabet = ascii_uppercase
-	
+	num_phases = 0
 	#define and undetermined amount of phases.
 	phasor_list = []
 	max_R = []
 	#ask user to input the number of phases they want.
-	num_phases = int(input("How many phases do you want to enter?:\n"))
+	while num_phases < 3:
+		num_phases = int(input("How many phases do you want to enter?:\n"))
+		if num_phases < 3:
+			print("Please enter more then 2 phases")
+			
 	#now ask the user to enter the values for the phases.
 	for i in range(num_phases):
-		radius = float(input(f"Enter Phase {alphabet[i%26]}'s radius: "))
-		angle = float(input(f"Enter Phase {alphabet[i%26]}'s angle: "))	
+		radius = float(input(f "Enter Phase {alphabet[i%26]}'s radius: "))
+		angle = float(input(f "Enter Phase {alphabet[i%26]}'s angle: "))	
 		phasor_list.append(phasor(radius, angle))
 		max_R.append(radius)
-
+	
+	#Create alpha 
 	alpha = 360/num_phases
 	a = phasor(1,alpha)
-		
-
+	
+	
+	
+	'''
+	Create the matrix
+	'''
+	
+	'''
+		plot vectors
+	'''
 
 	#prints the original list of phasors
 	for i in range(num_phases):	
@@ -60,8 +73,6 @@ def main():
 		plot_vector(0, 0, phasor_list[i].radius, phasor_list[i].angle, color[i%len(color)])
 	#plot using scaling of max phasor radius length
 	plot(max(max_R))
-	#plot the graph and scale to match the phasors.
-	#plot(maximum(phase_A.radius, phase_B.radius, phase_C.radius))
 
 '''
 Adds a vector to the plot. Inputs are polar coords and color of line. 
@@ -107,16 +118,43 @@ def pol2cart(rho, phi):
 	x = rho*np.cos(phi)
 	y = rho*np.sin(phi)
 	return(round(x,2),round(y,2))
-
-'''
-Finds max of 3 numbers. Used for scaling plot.
-Author: Brandon Johnson.
-Date created: 10/27/2019
-'''
-def maximum(a, b, c): 
-    list = [a, b, c] 
-    return max(list) 
 	
 if __name__ == "__main__":
 	main()
+	
+'''
+4 case:
+
+A3 =[1, 1  1 ]
+	[1, a2 a ]
+	[1, a  a2]
+
+A4 =[1  1  1  1 ]
+	[1  a3 a2 a ]
+	[1  a2 a4 a2]
+	[1  a  a2 a3]
+
+A5 =[1  1  1  1  1 ]
+	[1  a4 a3 a2 a ]
+	[1  a3 a  a4 a2]
+	[1  a2 a4 a  a3]
+	[1  a  a2 a3 a4]
+
+A6 =[1  1  1  1  1  1 ]    
+	[1  a5 a4 a3 a2 a ]
+	[1  a4 a2 a6 a4 a2]
+	[1  a3 a6 a3 a6 a3]	
+	[1  a2 a4 a6 a4 a2]	
+	[1  a  a2 a3 a4 a5]
+
+even case:	
+A  = [1 .   .      .   . 1]
+     [. n    n-1 
+	 [. n-1 (n-1)/2
+	 [. .   n
+	 [. .	.
+	 [1 n2  .      .   . n]
+	 
+Vandermonde matrix
+'''
 	
