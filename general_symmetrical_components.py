@@ -155,6 +155,6 @@ A  = [1 .   .      .   . 1]
 	 [. .	.
 	 [1 n2  .      .   . n]
 	 
-Vandermonde matrix
+Vandermonde matrix the value of alpha = alpha^(row*column)
 '''
 	
