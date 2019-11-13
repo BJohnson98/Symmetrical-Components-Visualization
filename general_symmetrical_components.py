@@ -43,6 +43,7 @@ def main():
 	phasor_list = []
 	# Want to keep track of the maxium radius size inputted. 
 	max_R = []
+	sequence_list = []
 
 	#ask user to input the number of phases they want.
 	while num_phases < 3:
@@ -71,34 +72,28 @@ def main():
 	#create the matrix
 	for row in range(num_phases):
 		for col in range(num_phases): 
+			#this equation helps us create a DFT_matrix.
 			A_Matrix[row][col] = a.cart()**((row*col)%num_phases)
 	
 	#Get the sequence components by dotting A_matrix(-1) * the unbalanced phases 
 	sequence_components = np.dot(np.linalg.inv(A_Matrix), unbalanced)
 	
-	sequence_list = []
+	#I take the sequence components matrix and I put it into a list of phasor objects. 
+	#I do this to make plotting all n*n sequence components much easier. 
 	for i in range(num_phases):
 		sequence_list.append(phasor())
 		sequence_list[i].input_cart(sequence_components[i].real, sequence_components[i].imag)
-
-	'''
-	x = 0 
-	y = 0
-	for i in range(num_phases):
-		#radius, angle = pol2cart(sequence_components[i])
-		plot_vector(x,y, sequence_list[i].radius, sequence_list[i].angle, color[i%len(color)])
-		x += sequence_list[i].get_real()
-		y += sequence_list[i].get_imaginary()	
 	
-	# All that is left to do is to rotate the vectors for each phase.
-	'''
+	#plots all of the sequence components for every phase.
 	for i in range(num_phases):
-		start_x = int(0)
-		start_y = int(0)
+		start_x = 0
+		start_y = 0
+		#Plot all the sequence components for the current phase. 
 		for j in range(num_phases):
 			plot_vector(start_x, start_y, sequence_list[j].radius, sequence_list[j].angle, color[(num_phases+j)%len(color)])
 			start_x += sequence_list[j].get_real() 		
 			start_y += sequence_list[j].get_imaginary()	
+		#rotates the vectors for the next phase.
 		for j in range(num_phases):
 			sequence_list[j].rotate((alpha*j)%360)
 	
@@ -133,17 +128,6 @@ def plot(max):
 	plt.show()
 	
 '''
-Converts cartesian coordinates to polar. 
-Output for angle is degrees
-Author: Brandon Johnson.
-Date created: 10/27/2019
-'''
-def cart2pol(x, y):
-	rho = np.sqrt(x**2 + y**2)
-	phi = np.arctan2(y, x)*180/math.pi
-	return(round(rho,2), round(phi,2))
-	
-'''
 Converts polar coordinates to cartesian. This function
 is used when plotting each phase. Angles are inputed in degrees
 Author: Brandon Johnson.
@@ -158,32 +142,3 @@ def pol2cart(rho, phi):
 if __name__ == "__main__":
 	main()
 	
-'''
-4 case:
-A3 =[1, 1  1 ]
-    [1, a2 a ]
-    [1, a  a2]
-A4 =[1  1  1  1 ]
-    [1  a3 a2 a ]
-    [1  a2 a4 a2]
-    [1  a  a2 a3]
-A5 =[1  1  1  1  1 ]
-    [1  a4 a3 a2 a ]
-    [1  a3 a  a4 a2]
-    [1  a2 a4 a  a3]
-    [1  a  a2 a3 a4]
-A6 =[1  1  1  1  1  1 ]    
-    [1  a5 a4 a3 a2 a ]
-    [1  a4 a2 a6 a4 a2]
-    [1  a3 a6 a3 a6 a3]	
-    [1  a2 a4 a6 a4 a2]	
-    [1  a  a2 a3 a4 a5]
-even case:	
-A  = [1 .   .      .   . 1]
-     [. n    n-1 
-     [. n-1 (n-1)/2
-     [. .   n
-     [. .	.
-     [1 n2  .      .   . n]
-	 
-'''
