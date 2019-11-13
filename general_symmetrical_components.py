@@ -36,7 +36,7 @@ class phasor:
 		self.angle = self.angle + alpha
 
 def main():
-	color = ['red','y','blue','orange','green','magenta','cyan','brown','purple']
+	color = ['red','y','blue','orange','green','magenta','cyan','brown','purple','skyblue','tomato','springgreen']
 	alphabet = ascii_uppercase
 	num_phases = 0
 	#define and undetermined amount of phases.
@@ -81,7 +81,7 @@ def main():
 		sequence_list.append(phasor())
 		sequence_list[i].input_cart(sequence_components[i].real, sequence_components[i].imag)
 
-	
+	'''
 	x = 0 
 	y = 0
 	for i in range(num_phases):
@@ -91,11 +91,17 @@ def main():
 		y += sequence_list[i].get_imaginary()	
 	
 	# All that is left to do is to rotate the vectors for each phase.
-		'''
+	'''
+	for i in range(num_phases):
+		start_x = int(0)
+		start_y = int(0)
 		for j in range(num_phases):
-			#plot the n vectors
-		#rotate and add the vectors
-		'''
+			plot_vector(start_x, start_y, sequence_list[j].radius, sequence_list[j].angle, color[(num_phases+j)%len(color)])
+			start_x += sequence_list[j].get_real() 		
+			start_y += sequence_list[j].get_imaginary()	
+		for j in range(num_phases):
+			sequence_list[j].rotate((alpha*j)%360)
+	
 	#prints the original list of phasors
 	for i in range(num_phases):	
 		print(phasor_list[i].radius, phasor_list[i].angle)
@@ -154,29 +160,24 @@ if __name__ == "__main__":
 	
 '''
 4 case:
-
 A3 =[1, 1  1 ]
     [1, a2 a ]
     [1, a  a2]
-
 A4 =[1  1  1  1 ]
     [1  a3 a2 a ]
     [1  a2 a4 a2]
     [1  a  a2 a3]
-
 A5 =[1  1  1  1  1 ]
     [1  a4 a3 a2 a ]
     [1  a3 a  a4 a2]
     [1  a2 a4 a  a3]
     [1  a  a2 a3 a4]
-
 A6 =[1  1  1  1  1  1 ]    
     [1  a5 a4 a3 a2 a ]
     [1  a4 a2 a6 a4 a2]
     [1  a3 a6 a3 a6 a3]	
     [1  a2 a4 a6 a4 a2]	
     [1  a  a2 a3 a4 a5]
-
 even case:	
 A  = [1 .   .      .   . 1]
      [. n    n-1 
@@ -186,4 +187,3 @@ A  = [1 .   .      .   . 1]
      [1 n2  .      .   . n]
 	 
 '''
-	
