@@ -13,14 +13,20 @@ When I first started this project I only tried to see if I could do the three ph
 A realistic example is a line-to ground fault on the power system. this would mean that one of the phase voltages would go to 0, the system below shows how these 2 symmetric sets, and 1 unsymmetric but equal set form our original system.
 
 # 3-Phase system where the C-phase is shorted.
-![Example_2](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/example_3.png)
+![Example_2](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/3_Phase_Case.png)
 
 
 After I was able to get the three phase case I wondered if I would be to recreate this for every case. The idea was to first ask the user how many phases they would want to enter, and it would show the phasors they entered broked down into N symmetric sets. This is largely impractical because there are not any 4-phase, 5-phase, 6-phase power systems but I was really intrigued how these graphs would look after I saw how cool the looked for the three phase case. I couldn't find anyone else who made something similiar to this so I had to a lot of research on how I would extend this concept, Thanks to wikipedia I found that higher order symmetrical components are just [Discrete fourier transforms](https://en.wikipedia.org/wiki/DFT_matrix).
 
+# 4-Phase example
+![Example_1](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/4_Phase_example.png)
 # 5-Phase example
 ![Example_1](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/5_Phase_example.png)
+# 6-Phase example
+![Example_1](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/6_Phase_example.png)
 # 8-Phase example
 ![Example_1](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/8_Phase_Example.png)
 # 10-Phase example
 ![Example_3](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/10_Phase_Example.png)
+# 30-Phase example
+![Example_1](https://github.com/BJohnson98/Symmetrical-Components-Visualization/blob/master/Examples/30_Phase_Case.png)
