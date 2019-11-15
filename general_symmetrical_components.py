@@ -7,10 +7,10 @@ https://en.wikipedia.org/wiki/DFT_matrix
 Author: Brandon Johnson
 Date Started: 11/6/2019
 '''
-import numpy as np
-import matplotlib.pyplot as plt
-import math
 import cmath
+import math
+import matplotlib.pyplot as plt
+import numpy as np
 from string import ascii_uppercase
 
 class phasor:
@@ -23,17 +23,19 @@ class phasor:
 		z = round(x,3) + round(y,3)*cmath.sqrt(-1)
 		return(z)
 	def get_real(self):
-		return(round(self.radius*np.cos(self.angle*math.pi/180),3))
-		
+		return(round(self.radius*np.cos(self.angle*math.pi/180),3))	
 	def get_imaginary(self): 
 		return(round(self.radius*np.sin(self.angle*math.pi/180),3))
 	#allows you to input a new phasor in cartesian form.
 	def input_cart(self, real, imag):
 		self.radius = round(np.sqrt(real**2 + imag**2),3)
 		self.angle = round(np.arctan2(imag, real)*180/math.pi,3)
-	
+	#rotates a velctor by alpha degrees
 	def rotate(self, alpha):
 		self.angle = self.angle + alpha
+	#Adds a vector to the plot. Inputs are starting x and y and color of line. 
+	def plot(self, start_x, start_y, c):
+		plt.quiver(start_x, start_y, self.get_real(), self.get_imaginary(), angles='xy', scale_units='xy', scale=1, color=c)
 
 def main():
 	color = ['red','y','blue','orange','green','magenta','cyan','brown','purple','skyblue','tomato','springgreen']
@@ -90,7 +92,7 @@ def main():
 		start_y = 0
 		#Plot all the sequence components for the current phase. 
 		for j in range(num_phases):
-			plot_vector(start_x, start_y, sequence_list[j].radius, sequence_list[j].angle, color[(num_phases+j)%len(color)])
+			sequence_list[j].plot(start_x, start_y, color[(num_phases+j)%len(color)])
 			start_x += sequence_list[j].get_real() 		
 			start_y += sequence_list[j].get_imaginary()	
 		#rotates the vectors for the next phase.
@@ -100,20 +102,11 @@ def main():
 	#prints the original list of phasors
 	for i in range(num_phases):	
 		print(phasor_list[i].radius, phasor_list[i].angle)
-		plot_vector(0, 0, phasor_list[i].radius, phasor_list[i].angle, color[i%len(color)])
+		phasor_list[i].plot(0,0, color[i%len(color)])
+	
 	#plot using scaling of max phasor radius length
 	plot(max(max_R))
 	
-
-'''
-Adds a vector to the plot. Inputs are polar coords and color of line. 
-Author: Brandon Johnson.
-Date created: 10/27/2019
-'''
-def plot_vector(start_x, start_y, radius, angle, c):
-	x,y = pol2cart(radius,angle)
-	plt.quiver(start_x, start_y, x, y, angles='xy', scale_units='xy', scale=1, color=c)
-
 '''
 Finally plots the graph and post processing.
 max input helps scale the graph. 
@@ -126,18 +119,6 @@ def plot(max):
 	plt.grid()
 	plt.gca().set_aspect('equal', adjustable='box')
 	plt.show()
-	
-'''
-Converts polar coordinates to cartesian. This function
-is used when plotting each phase. Angles are inputed in degrees
-Author: Brandon Johnson.
-Date created: 10/27/2019
-'''
-def pol2cart(rho, phi):
-	phi = phi*math.pi/180
-	x = rho*np.cos(phi)
-	y = rho*np.sin(phi)
-	return(round(x,2),round(y,2))
 	
 if __name__ == "__main__":
 	main()
