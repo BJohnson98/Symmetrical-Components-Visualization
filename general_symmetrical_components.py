@@ -17,15 +17,12 @@ class phasor:
 	def __init__(self, radius=0, angle=0):
 		self.radius = radius
 		self.angle = angle
-	def cart(self):
+	#returns the cartesian form a+jb
+	def get_cart(self):
 		x = self.radius*np.cos(self.angle*math.pi/180)
 		y = self.radius*np.sin(self.angle*math.pi/180)
 		z = round(x,3) + round(y,3)*cmath.sqrt(-1)
 		return(z)
-	def get_real(self):
-		return(round(self.radius*np.cos(self.angle*math.pi/180),3))	
-	def get_imaginary(self): 
-		return(round(self.radius*np.sin(self.angle*math.pi/180),3))
 	#allows you to input a new phasor in cartesian form.
 	def input_cart(self, real, imag):
 		self.radius = round(np.sqrt(real**2 + imag**2),3)
@@ -35,7 +32,7 @@ class phasor:
 		self.angle = self.angle + alpha
 	#Adds a vector to the plot. Inputs are starting x and y and color of line. 
 	def plot(self, start_x, start_y, c):
-		plt.quiver(start_x, start_y, self.get_real(), self.get_imaginary(), angles='xy', scale_units='xy', scale=1, color=c)
+		plt.quiver(start_x, start_y, self.get_cart().real, self.get_cart().imag, angles='xy', scale_units='xy', scale=1, color=c)
 
 def main():
 	color = ['red','y','blue','orange','green','magenta','cyan','brown','purple','skyblue','tomato','springgreen']
@@ -62,7 +59,7 @@ def main():
 		angle = float(input(f"Enter Phase {alphabet[i%26]}'s angle: "))	
 		#add phasors to the list and cartesian coordinates to unbalanced array
 		phasor_list.append(phasor(radius, angle))
-		unbalanced[i] = phasor_list[i].cart()
+		unbalanced[i] = phasor_list[i].get_cart()
 		max_R.append(radius)
 	
 	#Create alpha 
@@ -75,7 +72,7 @@ def main():
 	for row in range(num_phases):
 		for col in range(num_phases): 
 			#this equation helps us create a DFT_matrix.
-			A_Matrix[row][col] = a.cart()**((row*col)%num_phases)
+			A_Matrix[row][col] = a.get_cart()**((row*col)%num_phases)
 	
 	#Get the sequence components by dotting A_matrix(-1) * the unbalanced phases 
 	sequence_components = np.dot(np.linalg.inv(A_Matrix), unbalanced)
@@ -93,8 +90,8 @@ def main():
 		#Plot all the sequence components for the current phase. 
 		for j in range(num_phases):
 			sequence_list[j].plot(start_x, start_y, color[(num_phases+j)%len(color)])
-			start_x += sequence_list[j].get_real() 		
-			start_y += sequence_list[j].get_imaginary()	
+			start_x += sequence_list[j].get_cart().real 		
+			start_y += sequence_list[j].get_cart().imag	
 		#rotates the vectors for the next phase.
 		for j in range(num_phases):
 			sequence_list[j].rotate((alpha*j)%360)
